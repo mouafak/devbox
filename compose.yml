@@ -1,0 +1,33 @@
+services:
+  devbox:
+    image: devbox:latest
+    container_name: devbox
+    hostname: devbox
+    runtime: sysbox-runc              # OBLIGATOIRE
+    restart: unless-stopped
+    environment:
+      - HASHED_PASSWORD=${HASHED_PASSWORD}
+    ports:
+      - "127.0.0.1:18080:8080"        # jamais 0.0.0.0
+    volumes:
+      - devbox-home:/home/dev         # dotfiles, projets, extensions
+      - devbox-docker:/var/lib/docker # images et volumes du Docker interne
+    cpus: "8"                         # moitié des 16 cœurs (phase 0)
+    mem_limit: 16g
+    memswap_limit: 16g
+    pids_limit: 4096
+    cpu_shares: 512                   # les sites passent avant en cas de charge
+    networks: [devnet]
+
+volumes:
+  devbox-home:
+  devbox-docker:
+
+networks:
+  devnet:
+    driver: bridge
+    driver_opts:
+      com.docker.network.bridge.name: br-devnet
+    ipam:
+      config:
+        - subnet: 10.250.0.0/24       # sous-réseau libre choisi en phase 0
