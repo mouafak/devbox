@@ -21,7 +21,8 @@ RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - \
 # code-server (VS Code dans le navigateur)
 RUN curl -fsSL https://code-server.dev/install.sh | sh
 
-RUN useradd -m -u 1000 -s /bin/zsh dev && usermod -aG docker dev
+# RUN useradd -m -u 1000 -s /bin/zsh dev && usermod -aG docker dev
+RUN useradd -m -u 1000 -s /bin/bash dev && usermod -aG docker dev
 
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
